@@ -1,5 +1,6 @@
 import re
 import json
+import codecs
 import requests
 from bs4 import BeautifulSoup
 from ocelot.beautifulladel import BeautifulLadel
@@ -17,8 +18,8 @@ class AmazonWishlist:
             self.getitems()
         else:
             try:
-                with open(filepath, 'r') as file:
-                    data = json.load(fp=file)
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
                     self.url = data['url']
                     for k, v in data['items'].items():
                         self.items.update({k: AmazonItem(self.id, id=k, price=v['price'], name=v['name'], url=v['link'])})
@@ -36,11 +37,10 @@ class AmazonWishlist:
 
     def savejson(self, path):
         try:
-            with open(path+'/'+self.id+'.json', 'w') as file:
-                json_data = json.dump(self.getdata(), fp=file, indent=4)
+            with codecs.open(path+'/'+self.id+'.json', 'w', encoding="utf-8") as file:
+                json_data = json.dump(self.getdata(), fp=file, indent=4, ensure_ascii=False)
         except IOError as e:
             print(e)
-
 
 
     def getdata(self):
@@ -76,7 +76,6 @@ class AmazonItem:
         self.wishlist = wishlist
         self.wlist_url = AmazonWishlist.getURL(wishlist)
         self.ladel = BeautifulLadel(self.wlist_url, soup=soup)
-        self.getprice(ladel=self.ladel)
 
         if id is None:
             self.id = soup['id'][len('itemInfo_'):]
@@ -84,6 +83,7 @@ class AmazonItem:
             self.name = itemNameElement.contents[0].strip()
             self.url = itemNameElement['href']
 
+        self.getprice(ladel=self.ladel)
 
     def getprice(self, ladel=None):
         self.ladel = BeautifulLadel(self.wlist_url) if ladel is None else ladel
@@ -95,6 +95,7 @@ class AmazonItem:
             url = 'http://www.amazon.com/' + self.url
             self.sendburst(message, url=url)
             self.price.append(pricef)
+
 
 
     def getdata(self):
