@@ -37,7 +37,7 @@ class AmazonWishlist:
     def savejson(self, path):
         try:
             with open(path+'/'+self.id+'.json', 'w') as file:
-                json_data = json.dump(self.getdata(), fp=file, indent=4, ensure_ascii=False)
+                json_data = json.dump(self.getdata(), fp=file, indent=4)
         except IOError as e:
             print(e)
 
