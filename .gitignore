@@ -1,0 +1,17 @@
+# Created by https://www.gitignore.io
+
+### Project ###
+run
+omniv.py
+saves/*
+
+
+### Intellij ###
+*.iml
+.idea/
+
+### OSX ###
+.DS_Store
+
+### Python ###
+ve/
