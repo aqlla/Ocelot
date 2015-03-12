@@ -12,3 +12,6 @@ Amazon Price Notifier
 
 ###Amazon Login
 - Automatically sync account wishlists
+
+
+Thanks to [Tyler Casson](https://github.com/tylercasson) for his Omnivus project, which is the medium through which notifications are delivered.
